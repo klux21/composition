@@ -2,7 +2,7 @@
   <img src="composition.svg" width="300">
 </p>
 
-<h1>COMPOSITION - An untyped structured hierarchic data format</h1>
+<h2>COMPOSITION - An untyped structured hierarchic data format</h2>
 
 
 COMPOSITION is a modern untyped configuration file format with hierarchical elements.
