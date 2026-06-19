@@ -127,7 +127,7 @@ dec_digit       = "0"..."9" ;
 
 hex_escape      = "x" hex_digit [ hex_digit ] ;
 utf8_escape     = "u" hex_digit [ hex_digit ] [ hex_digit ] [ hex_digit ]
-                  [ hex_digit ] [ hex_digit ] [ hex_digit ];
+                  [ hex_digit ] [ hex_digit ] [ hex_digit ] [ hex_digit ] ;
 hex_digit       = "0"..."9" | "A"..."F" | "a"..."f" ;
 
 char_escape     = any_char_except( "\0" ) ;
@@ -227,11 +227,15 @@ follows:
   \O      byte as a octal value O (1-3 octal digits)
   \dD     byte as a decimal value D (1-3 decimal digits)
   \xH     byte as a hexadecimal value H (1-2 hexadecimal digits)
+  \uH     UTF-8 sequence of the hexadecimal character value H
+          (1-8 hexadecimal digits)
 
 Leading zeros within a decimal, octal and hexadecimal escapes are
 permitted.
 Control characters SHOULD be specified as numeric escapes.
 Numeric values MUST NOT exceed byte range nor the number of digits.
+The number of digits for UTF-8 values intentionally exceeds the current
+UTF-8 standard but enables to set 4 byte wide characters to any value.
 
 8.3.1 Handling of Unknown Escape Sequences (Normative)
 
