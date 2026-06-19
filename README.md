@@ -2,25 +2,25 @@
   <img src="composition.svg" width="300">
 </p>
 
-<h2>COMPOSITION - An untyped structured hierarchic data format</h2>
+<h2>COMPOSITION - An untyped structured hierarchical data format</h2>
 
 
 COMPOSITION is a modern untyped configuration file format with hierarchical elements.
 
 A composition document consists of an ordered collection of entries.
 Each entry consists of a name and optionally either an argument or a nested composition
-that the name referes to.
-Compositions documents may be divided into sections for improved readability and
+that the name refers to.
+Composition documents may be divided into sections for improved readability and
 compatibility with existing INI-based configurations.
 
 It keeps the simplicity and readability of INI but adds:
 
- -   hierarchic blocks using opening and closing braces { }
+ -   hierarchical blocks using opening and closing braces { }
  -   optional sections
  -   quoted and unquoted strings
  -   robust comment syntax
- -   enables a zero-copy friendly parsing
- -   has no type system (values are always strings or composition)
+ -   zero-copy-friendly parsing
+ -   has no types (values are always strings or subdocuments)
 
 COMPOSITION is designed for:
 
@@ -36,10 +36,10 @@ It is intentionally minimal, deterministic, and easy to parse in C and other lan
 Why COMPOSITION?
 
  - Classic INI is easy to read and write but not hierarchical and usually line separated.
- - TOML is kind of INI with type restrictions.
- - JSON is hierarchical but noisy and rigid and lacks comments.
+ - TOML is similar to INI but adds type restrictions.
+ - JSON is hierarchical but verbose, rigid, and lacks comments.
  - YAML is flexible but fragile.
- - XML is XML. Not great to read for humans nor machines.
+ - XML  is XML. Verbose and not great to read for humans or machines.
  - And COMPOSITION? That's a different kind of music.
 
 Composition documents are easy to read and trivial to use. They are easy to understand
@@ -74,36 +74,34 @@ Well, that looks a bit like INI except that there is that ssl block that contain
 a composition of entries which look more or less like an INI file as well.
 That's already what composition documents are.
 
-COMPOSITION defines a minimal syntax only and a document consists of three
+COMPOSITION defines only a minimal syntax; a document consists of three
 types of optional elements
 
   - Entries which consists of a name string that can be followed by an equality sign
     and an argument value string.
-  - Blocks as a special type of entries where the argument values consist of an
-    independent composition subdocument within a pair of curly braces.
-  - Sections which are dividing composition into independent parts and consist of a
-    section name string within a pair of square braces.
+  - Blocks, a special type of entry, whose argument is an independent composition
+    subdocument enclosed in curly braces.
+  - Sections, which divide a composition into parts and consist of a section name
+    string enclosed in square brackets and followed by the section related entries.
 
-Blocks can contain sections and sections blocks as well.
+Blocks can contain sections, and sections can cointain blocks as well.
 Beside of that there are two types of comments
 
-  - Line comments that begin with a hash # or a semicolon ; and end at the end
+  - Line comments that begin with a hash '#' or a semicolon ';' and end at the end
     of the line.
-  - Block comments which start with either a hash # or a semicolon ; followed
-    by an asterisk * and ending with the start character sequence in reversed
-    order.
+  - Block comments start with '#' or ';' followed by a '*' and ending with the start
+    character sequence in reversed order. Example: #* comment1 *#  ;* comment2 *;
 
-Of course there is a little bit more. In composition documents line feeds are
-terminating line comments and are nothing but entry separating whitespaces beside
-of that. For this a single line for a that composition document before is enough
-e.g.
+Of course there is a little bit more. In composition documents, line feeds terminate
+line comments and otherwise they are entry‑separating whitespace only.
+A single line for the composition document before is enough e.g.
 
 ```
-[server] host="localhost" port=8080 ssl = { enabled certificate="/etc/certs/server.pem" [ciphers] #* comment block *# accept = { TLS_AES_128_CCM_8_SHA256  TLS_CHACHA20_POLY1305_SHA256  TLS_AES_128_GCM_SHA256 }}} # line comment
+[server] host="localhost" port=8080 tls = { enabled certificate="/etc/certs/server.pem" [ciphers] #* comment block *# accept = { TLS_AES_128_CCM_8_SHA256  TLS_CHACHA20_POLY1305_SHA256  TLS_AES_128_GCM_SHA256 }}} # line comment
 ```
-Equal signs before curly braces are optional and a question of personal taste.
+Equals signs before curly braces are optional and a question of personal taste.
 Strings that contain whitespaces or special characters require a pair of
-entangling quotes for all their parts that contain those.
+enclosing quotes for all their parts that contain those.
 The support of sections ensures compatibility with most existing INI files but
 it's totally OK to skip the usage of sections.
 That way configuration file above would become a bit more trivial, e.g.
@@ -114,7 +112,7 @@ server
    host = localhost
    port = 8080
 
-   ssl
+   tls
    {
       enabled
       certificate = "/etc/certs/server.pem"
@@ -147,9 +145,9 @@ So what does it take to parse something like that in C ?
 - Copy the document to character buffer in memory.
   Conforming composition parsers should stop at a '\0' in documents so it's always a good
   idea to terminate the document data like a C string.
-  The parser object can be as simple as just a character pointer that iterates that buffer.
+  The parser object can be as simple as character pointer that iterates the buffer.
 - Skip blanks, comments and line feeds which are just entry separating whitespace and iterate
-  the entries until the end of the entangling block or the end of the document.
+  the entries until the end of the enclosing block or the end of the document.
 - Once there starts a section than the content after the section header belongs to that
   section. Continue the iteration after parsing the section header and remembering it's name.
 - The content of sections and blocks can be returned as unquoted and unescaped string data or
@@ -157,7 +155,7 @@ So what does it take to parse something like that in C ?
 - A COMPOSITION parser should provide helper functions for removing the quotes from strings
   and optionally replacing the predefined escape sequences within strings.
 - Applications need to check the entry names and to convert the argument strings into their
-  internal data e.g. if the arguments is expected to be a double it they may call strtod().
+  internal data e.g. if an argument is expected to be a double they may call strtod().
 
 That is nearly all of the magic that parsing composition documents requires.
 As soon as you have a good parser composition documents are trivial to handle and a very
@@ -165,7 +163,7 @@ powerful tool.
 
 Usually it's not the parsing of the document structure but the conversion of the strings
 to integers, floats and times that consumes most of the CPU time.
-Once that is a problem or if your compiler doesn't supports hexadecimal floats or the
+Once that is a problem or if your compiler doesn't support hexadecimal floats or the
 prefixing of binary and octal integer values with 0b and 0o then you may try the following
 project
 
@@ -176,26 +174,25 @@ The following project may help with time values
  https://github.com/klux21/limitless_times
 
 One of the greatest advantages of composition documents are their very lenient syntax.
-The format itself has not much special elements. A simple list of some white space or
+The format itself does not have many special elements. A simple list of some white space or
 line feed separated numbers or words and many simple configuration files are already
 valid composition documents and readable using a COMPOSITION parser.
-Because of that the most common file extension of composition documents are just
-.ini, .cfg and .cof that indicates a COMPOSITION file.
+Because of that the most common file extensions for composition documents are .ini or .cfg
+and also .cof that indicates a COMPOSITION file.
 
 Of course most people have very different ideas how their compositions should be.
-For preventing a lot of deviations of the parsers there exist a first little
-standard draft of the COMPOSITION format
+To reduce deviations between parsers, there is an initial draft of the COMPOSITION standard
 
  https://github.com/klux21/composition/blob/main/composition_standard.txt
 
-Once a parser intentionally deviates from that it should be documented for the users.
-E.g. a parser that treats comma as blank and colon like an equality sign to enable
-parsing of JSON files and enabling COMPOSITION comments within them.
+If a parser intentionally deviates from the draft, it should document the differences
+e.g. if treating comma as whitespace and colon as equals to parse JSON while allowing
+COMPOSITION comments in that.
 Of course such a parser would have trouble with COMPOSITION documents that are using
 commas and colons outside of embracing quotes so it's better to implement a separate
 conversion function for JSON.
 
-Once there are errors or problems which should be solved than just file an error
+Once there are errors or problems which should be solved than just file an issue
 for that in
 
 https://github.com/klux21/composition/issues
