@@ -93,8 +93,8 @@ Besides that, there are two types of comments:
 
   - Line comments that begin with a hash '#' or a semicolon ';' and end at the end
     of the line.
-  - Block comments start with '#*' or ';*' and end with their start sequence in
-    reversed order which is '*#' or '*;'.
+  - Block comments start with '#\*' or ';\*' and end with their start sequence in
+    reversed order which is '\*#' or '\*;'.
 
 Of course there is a little bit more. In composition documents, line feeds terminate
 line comments and otherwise they are entry‑separating whitespace only.
