@@ -128,8 +128,9 @@ server
 }
 ```
 
-That's not XML and not JSON nor INI but a very lightweight and structured data composition.
-However, in case of more complex documents sections may help to improve the readability.
+That's not XML and not JSON nor INI but a very lightweight and structured configuration
+data composition. However, in case of more complex documents sections may improve
+the readability.
 
 For parsing composition documents the application needs to know what entry names it expects,
 what types the arguments are where those are located within document structure and whether
