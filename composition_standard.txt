@@ -1,22 +1,24 @@
-Independent RFC-Style Format Specification of COMPOSITION 1.0 Format
+Independent RFC-Style Format Specification Of Data Composition 1.0 Format
 
-COMPOSITION: A Structured, Untyped, Hierarchic Data Format
+A Structured, Untyped, Hierarchic Data Composition Format
 
 Version 1.0
 
-COMPOSITION is a modernized and improved configuration file format for
-storing all kind of serialized text data in a form that is easy for
+Data Composition is a modernized and improved configuration file format
+for storing all kind of serialized text data in a form that is easy for
 humans and programs to read and write.
 
 1.   Abstract
 
-COMPOSITION is a minimal, untyped, whitespace-tolerant, block-structured
-text format designed for configuration files, lightweight data
-serialization, small text databases and lightweight text base protocols.
+Data Composition is a minimal, untyped, whitespace-tolerant,
+block-structured text format designed for configuration files,
+lightweight data serialization, small text databases and lightweight
+text base protocols.
 The format defines a small set of syntactic constructs: entries,
 strings, blocks, sections and comments and intentionally avoids all type
-semantics. The COMPOSITION format is designed for very small parsers.
-COMPOSITION does not define executable constructs or encrypted file
+semantics.
+The Data Composition format is designed for very small parsers.
+Composition does not define executable constructs or encrypted file
 formats. Applications interpret string values according their own type
 system. A zero-copy parsing is possible.
 
@@ -29,7 +31,7 @@ All examples are non-normative unless explicitly stated otherwise.
 
 3.   Overview
 
-A COMPOSITION document consists of
+Data Composition documents consists of
 
   -  zero or more entries
   -  optional top-level values
@@ -38,7 +40,7 @@ A COMPOSITION document consists of
   -  optional comments
   -  arbitrary whitespace
 
-COMPOSITION is designed to be
+Data Compositions are designed to be
 
   -  easy to parse
   -  easy to write
@@ -48,14 +50,14 @@ COMPOSITION is designed to be
   -  suitable for configuration files and small text databases
   -  suitable for text-based protocols
 
-COMPOSITION does not define data types.
-All values are strings or blocks of COMPOSITION subdocuments.
+The Data Composition format does not define data types.
+All values are strings or blocks of Data Composition subdocuments.
 Any interpretation of the strings is the responsibility of the
 application.
 
 4.   Data Model
 
-A COMPOSITION document is a sequence of entries.
+Data Composition documents are a sequence of entries.
 Each entry consists of
 
   -  a name (possibly empty)
@@ -69,7 +71,7 @@ Values are either
   -  blocks
 
 Blocks contain nested entries.
-A COMPOSITION document consists of 8-bit characters.
+Data Composition documents consists of 8-bit characters.
 Application may restrict themselves to UTF-8.
 
 5.   Whitespace Handling (Normative)
@@ -85,7 +87,7 @@ The following characters are whitespace according to this standard
 
 This design avoids the complexities of Unicode whitespace handling and
 ensures that editors which do not display all control characters cannot
-accidentally alter the visible syntactic structure of a COMPOSITION
+accidentally alter the visible syntactic structure of a Data Composition
 document.
 
 Whitespace MAY appear between any two lexical tokens, including before
@@ -165,8 +167,8 @@ name with an empty value. Entries MAY span multiple lines.
 
 Note: Empty values are allowed to support patterns where the presence of
       a name alone conveys meaning. Applications MAY interpret such
-      entries as boolean flags or symbolic attributes, but COMPOSITION
-      itself assigns no intrinsic semantics.
+      entries as boolean flags or symbolic attributes, but Data
+      Compositions themself assign no intrinsic semantics.
 
 7.2  Anonymous Entries
 
@@ -285,7 +287,8 @@ Blocks MAY contain:
 Blocks MAY be nested arbitrarily.
 
 A } closes the innermost open block only.
-The content of a block is equivalent to a separate COMPOSITION document.
+The content of a block is equivalent to a separate Data Composition
+document.
 
 11.  Sections
 
@@ -376,12 +379,13 @@ Implementations MUST:
    - avoid memory allocations during unescaping or removing of quotes
    - treat input as untrusted and possibly incorrect
    - ensure that numeric values are treated as decimal numbers except
-     they are prefixed by a character sequence that distinguishes them
-     from decimal numbers. Common prefixes of other bases are 0b for
-     binary, 0o for octal and 0x for hexa_decimal numbers.
+     they are prefixed by a character sequence that distinguishes a
+     number them from decimal numbers by a letter instead of the decimal
+     digit '0'. Common prefixes of other bases are 0b for binary,
+     0o for octal and 0x for hexa_decimal numbers.
 
 17.   Acknowledgements
 
-The COMPOSITION format draws inspiration from INI, XML, JSON and
+The Data Composition format draws inspiration from INI, XML, JSON and
 block-structured languages while intentionally avoiding complexity and
 type semantics.
