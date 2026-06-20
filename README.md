@@ -2,7 +2,7 @@
   <img src="composition.svg" width="300">
 </p>
 
-<h2>The untyped, structured, hierarchical data composition format</h2>
+<h2>An untyped, structured, hierarchical data composition format</h2>
 
 
 Hierarchical data compositions are a modern untyped configuration file format.
@@ -116,7 +116,7 @@ Besides that, there are two types of comments:
 
   - Line comments that begin with a hash '#' or a semicolon ';' and end at the end
     of the line.
-  - Block comments start with '#\*' or ';\*' sequence and end with their start sequence in
+  - Block comments start with '#\*' or ';\*' sequence and end with the start sequence in
     reversed order which is '\*#' or '\*;'.
 
 Of course there is a little bit more. For a more flexible usage of structured compositions,
