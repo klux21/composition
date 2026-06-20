@@ -8,27 +8,26 @@
 Hierarchical data compositions are a modern untyped configuration file format.
 They are using a minimal set of structural elements for creating structured data.
 
-They consider the fact that many people don't need more than a simple list of some
-name and value pairs for the handful of their program parameters that even
-common INI files deem an overkill for that.
+They are considering the fact that many people don't need more than a simple list of
+some name and value pairs for the handful of program parameters that even common
+INI-files deem an overkill for that.
 
-But sometimes they need to extend those kind of configurations by a simple hierarchical
-structure for describing the subelements of some more complex entries.
+But sometimes those need to extend their configurations by a simple hierarchical
+structure for describing the subelements of some new and or more complex entries.
 Adding those subentries to a string and parsing that independently after reading it
 from the configuration file would by the most common way to solve this.
 Of course this comes with a flaw because it is very inflexible to extend and may
 even become a nightmare if the entries in such a string have subelements as well
-which may even require an escaping within their argument strings.
+which require an escaping of special characters within their argument strings.
 
 For solving this problem a different kind of entry is required that's not a string
 but holds subconfigurations only. One way to solve that would be to using JSON or XML
-now but those require to a switch that configuration to their rigid and quite
-different syntax and are turning that little configuration file from before into an
-eye sore.
+but those require to a switch that configuration to their rigid and quite different
+syntax and are turning that little configuration file from before into an eye sore.
 
 But all you really need is a different kind of string that holds the configuration
 of the subparameters for being parsed independently. That's where this slightly
-different data composition format comes from and that is referred as 'composition'
+different data composition format comes from which is referred as a 'composition'
 from now.
 
 Every composition consists of an ordered collection of entries.
@@ -135,7 +134,7 @@ those.
 Equals signs `=` before curly braces aren't really required for the syntax and optional.
 The support of sections within compositions ensures compatibility with most existing INI files but
 it's also fine to omit sections completely.
-That way configuration file above becomes a lot more trivial:
+That way the configuration file above becomes even more trivial:
 
 ```
 server {
@@ -158,7 +157,7 @@ server {
 That's not XML, JSON or INI but a very lightweight and well structured configuration.
 However, in case of more complex configurations sections may help to improve the readability.
 
-But what's with multi-line strings as in TOML? Well, because line-feeds are ignored quoted
+But what's with multi-line strings as in TOML? Well, because line-feeds are treated as whitespace
 strings may contain line-feeds and are allowed to span over as many lines as you want.
 
 For parsing composition documents the application needs to know what entry names it expects,
