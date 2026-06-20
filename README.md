@@ -39,7 +39,7 @@ and a limited compatibility with existing INI-based configurations.
 
 Those compositions keep the simplicity and readability of INI but add:
 
- -   hierarchical blocks using opening and closing braces { }
+ -   hierarchical blocks using opening and closing braces `{` `}`
  -   optional sections
  -   quoted and unquoted strings
  -   robust comment syntax
@@ -116,7 +116,7 @@ Besides that, there are two types of comments:
 
   - Line comments that begin with a hash `#` or a semicolon `;` and end at the end
     of the line.
-  - Block comments start with `#*` or `;*` sequence and end with the start sequence in
+  - Block comments start with a `#*` or `;*` sequence and end with the start sequence in
     reversed order which is `*#` or `*;`.
 
 Of course there is a little bit more. For a more flexible usage of structured compositions,
@@ -132,7 +132,7 @@ value pair argument list as a composition. Of course strings that contain whites
 special characters require a pair of enclosing quotes for all of their parts that contain
 those.
 
-Equals signs ('=') before curly braces aren't really required for the syntax and optional.
+Equals signs (`=`) before curly braces aren't really required for the syntax and optional.
 The support of sections within compositions ensures compatibility with most existing INI files but
 it's also fine to omit sections completely.
 That way configuration file above becomes a lot more trivial:
@@ -173,7 +173,7 @@ Compositions have no type semantics, no implicit conversions and no magic and ar
 So what does it take to parse something like that in C?
 
 - Copy the document into a character buffer in memory.
-  Conforming composition parsers should stop at a '\0' in documents, so it's a good idea to
+  Conforming composition parsers should stop at a `'\0'` in documents, so it's a good idea to
   terminate the data like a C string.
 - The parser object can be as simple as character pointer that iterates the buffer.
 - Skip blanks, comments and line feeds which are just entry separating whitespace and iterate
