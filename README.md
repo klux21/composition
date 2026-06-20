@@ -8,11 +8,11 @@
 Hierarchical data compositions are a modern untyped configuration file format.
 They are using a minimal set of structural elements for creating structured data.
 
-They care the fact that many people don't need more than a simple list of some
+They consider the fact that many people don't need more than a simple list of some
 name and value pairs for the handful of their program parameters that even
 common INI files deem an overkill for that.
 
-But sometimes they need to extend those kind of configurations by a simple hierachical
+But sometimes they need to extend those kind of configurations by a simple hierarchical
 structure for describing the subelements of some more complex entries.
 Adding those subentries to a string and parsing that independently after reading it
 from the configuration file would by the most common way to solve this.
@@ -21,14 +21,14 @@ even become a nightmare if the entries in such a string have subelements as well
 which may even require an escaping within their argument strings.
 
 For solving this problem a different kind of entry is required that's not a string
-but holds subconfigurations only. On way to solve that would be to using JSON or XML
+but holds subconfigurations only. One way to solve that would be to using JSON or XML
 now but those require to a switch that configuration to their rigid and quite
 different syntax and are turning that little configuration file from before into an
 eye sore.
 
 But all you really need is a different kind of string that holds the configuration
 of the subparameters for being parsed independently. That's where this slightly
-different data composition format comes from and that is refered as 'composition'
+different data composition format comes from and that is referred as 'composition'
 from now.
 
 Every composition consists of an ordered collection of entries.
@@ -99,7 +99,7 @@ tls = {
 ```
 Well, that looks a bit like INI except that there is that tls block that contains
 a composition of entries which look more or less like an INI file as well.
-That is already anything that structured data compositions need.
+That is basically all that structured data compositions need.
 
 Structured compositions have a very minimal syntax; a document consists of three
 types of elements:
@@ -114,10 +114,10 @@ types of elements:
 Blocks can contain sections, and sections can contain blocks as well.
 Besides that, there are two types of comments:
 
-  - Line comments that begin with a hash '#' or a semicolon ';' and end at the end
+  - Line comments that begin with a hash `#` or a semicolon `;` and end at the end
     of the line.
-  - Block comments start with '#\*' or ';\*' sequence and end with the start sequence in
-    reversed order which is '\*#' or '\*;'.
+  - Block comments start with `#*` or `;*` sequence and end with the start sequence in
+    reversed order which is `*#` or `*;`.
 
 Of course there is a little bit more. For a more flexible usage of structured compositions,
 line feeds are used for terminating line comments but otherwise they are entry-separating
