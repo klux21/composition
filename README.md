@@ -132,7 +132,7 @@ value pair argument list as a composition. Of course strings that contain whites
 special characters require a pair of enclosing quotes for all of their parts that contain
 those.
 
-Equals signs (`=`) before curly braces aren't really required for the syntax and optional.
+Equals signs `=` before curly braces aren't really required for the syntax and optional.
 The support of sections within compositions ensures compatibility with most existing INI files but
 it's also fine to omit sections completely.
 That way configuration file above becomes a lot more trivial:
