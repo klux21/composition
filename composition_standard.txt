@@ -119,7 +119,7 @@ block           = [ "=" ] "{" { entry | comment | section } "}" ;
 
 quoted          = ( "\"" { char | escape } "\"" ) | ( "\'" { char | escape } "\'" ) ;
 escape          = "\\" ( "\"" | "\\" | "a" | "b" | "d" | "e" | "f" | "n" | "r" | "t" | "v" | 
-                  | oct_escape | dec_escape | hex_escape | utf8_escape | char_escape ) ;
+                  | oct_escape | dec_escape | hex_escape | byte_escape | char_escape ) ;
 
 oct_escape      = oct_digit [ oct_digit ] [ oct_digit ] ;
 oct_digit       = "0"..."7" ;
@@ -128,7 +128,7 @@ dec_escape      = "d" dec_digit [ dec_digit ] [ dec_digit ] ;
 dec_digit       = "0"..."9" ;
 
 hex_escape      = "x" hex_digit [ hex_digit ] ;
-utf8_escape     = "u" hex_digit [ hex_digit ] [ hex_digit ] [ hex_digit ]
+byte_escape     = "u" hex_digit [ hex_digit ] [ hex_digit ] [ hex_digit ]
                   [ hex_digit ] [ hex_digit ] [ hex_digit ] [ hex_digit ] ;
 hex_digit       = "0"..."9" | "A"..."F" | "a"..."f" ;
 
@@ -229,15 +229,15 @@ follows:
   \O      byte as a octal value O (1-3 octal digits)
   \dD     byte as a decimal value D (1-3 decimal digits)
   \xH     byte as a hexadecimal value H (1-2 hexadecimal digits)
-  \uH     UTF-8 sequence of the hexadecimal character value H
+  \uH     byte sequence according the hexadecimal value H
           (1-8 hexadecimal digits)
 
 Leading zeros within a decimal, octal and hexadecimal escapes are
 permitted.
 Control characters SHOULD be specified as numeric escapes.
 Numeric values MUST NOT exceed byte range nor the number of digits.
-The number of digits for UTF-8 values intentionally exceeds the current
-UTF-8 standard but enables to set 4 byte wide characters to any value.
+Byte sequences SHALL be treated as a common part of a string.
+Conforming parsers MUST leave \u interpretation to the application.
 
 8.3.1 Handling of Unknown Escape Sequences (Normative)
 
