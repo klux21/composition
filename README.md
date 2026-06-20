@@ -9,11 +9,11 @@ Hierarchical data compositions are a modern untyped configuration file format.
 They are using a minimal set of structural elements for creating structured data.
 
 They care the fact that many people don't need more than a simple list of some
-name and value pairs for a handful of parameters of their programs that even
-common INI files seem an overkill for that.
+name and value pairs for the handful of their program parameters that even
+common INI files deem an overkill for that.
 
 But sometimes they need to extend those kind of configurations by a simple hierachical
-structure for describing some subelements of more complex entries.
+structure for describing the subelements of some more complex entries.
 Adding those subentries to a string and parsing that independently after reading it
 from the configuration file would by the most common way to solve this.
 Of course this comes with a flaw because it is very inflexible to extend and may
