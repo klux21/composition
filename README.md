@@ -2,7 +2,7 @@
   <img src="composition.svg" width="300">
 </p>
 
-<h2>An untyped, structured, hierarchical, user friendly data composition format</h2>
+<h2>The untyped, structured, hierarchical, user friendly data composition format</h2>
 
 
 Hierarchical data compositions are a modern untyped configuration file format.
