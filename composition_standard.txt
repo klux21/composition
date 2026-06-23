@@ -109,7 +109,7 @@ Code
 
 document        = { entry | comment | section } ;
 entry           = named_entry | anonymous_block ;
-section         = "[" name "]" ;
+section         = "[" { name } "]" ;
 named_entry     = name [ value ] ;
 anonymous_block = block ;
 name            = unquoted | quoted ;
@@ -293,23 +293,27 @@ document.
 11.  Sections
 
 Sections headers indicate the begin of a sequences of section related
-entries. A section name has no semantic meaning beyond grouping of
-entries. The usage of sections is optional. 
+entries. A section name has no semantic meaning beyond a grouping of
+entries. The usage of sections is optional.
 A sections begins with the section header that contains the name
 of the section embraced by a pair of square braces [ ].
-Leading and trailing comments and whitespaces aren't part of the name.
-Whitespaces and comments in the middle of a name are a part of the
-section name. The braces of section headers are not nesting. 
- 
-The sections content begins immediately after the closing brace of
-the section header.
-A new section implicitly terminates the content of a previous one
-of the same documents but not any section in the parent documents.
-The end of a document terminates the last top-level section of that
-document.
-Documents and blocks MAY contain comments and entries before the first
-section.
+The content of sections begins after the closing brace of the
+section header.
+A new section implicitly terminates the content of a previous section
+within the same block but doesn't affect sections in parent blocks.
+The end of a block terminates the last section of that block.
+Documents and blocks MAY contain comments and entries before the
+first section.
 Multiple sections of a document MAY share the same name.
+
+In order to avoid ambiguity, the following additional rules apply:
+   - The braces of section headers are not nesting.
+   - Comments and whitespaces between the enclosing braces and the
+     section name aren't part of the section name and ignored.
+   - Whitespaces and comments in the middle of a section name
+     are part of that section name.
+   - Curly braces and equals signs in section headers are treated
+     as a part of the section name.
 
 12.  Comments
 
