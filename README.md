@@ -220,6 +220,26 @@ with composition documents that are using commas and colons outside of embracing
 users need to be aware of that. (However, it would be a better idea to implement a special
 conversion function for JSON data in that case.)
 
-That's all about that. Once there are errors or problems, file an issue at:
+Of course it's more likely that some people dislike some of the features and prefere a subset
+of that tiny format only. That's OK, but sectionless, commentless, unescaped, unquoted or
+non-hierarchical only data composition parsers should be refered as that to prevent confusions.
+
+Parsing composition documents can be quite fast. Parsing the following document zero-copy on
+a Ryzen 3900 took about 400ns for finding the entries and 150ns for converting the numbers to
+either int64_t or double using str2i64_r str2d_r of klux21/str2num:
+```
+testname = zero_copy_tests
+inttests = { ib=0b1111 io=0o1234567 id=000056789 ix=0xabcd987 }
+floattests { fb=0b11.11e100 fo=0o1234.56e10 fd=1.2345e64 fx=0xabc.defp10 }
+```
+The end of the subdocuments were searched before looking for the entries because of a
+treatment of subdocuments as strings. Parsing documents without that would be faster.
+
+The test project with the benchmark and that first little parser for C and C++ can be
+found at
+
+https://github.com/klux21/composition_parser
+
+That's all about it. Once there are errors or problems, file an issue at:
 
 https://github.com/klux21/composition/issues
