@@ -292,9 +292,8 @@ document.
 
 11.  Sections
 
-Sections headers indicate the begin of a sequences of section related
-entries. A section name has no semantic meaning beyond a grouping of
-entries. The usage of sections is optional.
+Sections headers indicate the begin of a subsequent sequences of
+section related entries. The usage of sections is optional.
 A sections begins with the section header that contains the name
 of the section embraced by a pair of square braces [ ].
 The content of sections begins after the closing brace of the
@@ -304,10 +303,10 @@ within the same block but doesn't affect sections in parent blocks.
 The end of a block terminates the last section of that block.
 Documents and blocks MAY contain comments and entries before the
 first section.
-Multiple sections of a document MAY share the same name.
 
 In order to avoid ambiguity, the following additional rules apply:
    - The braces of section headers are not nesting.
+   - Multiple sections of a document MAY share the same name.
    - Comments and whitespaces between the enclosing braces and the
      section name aren't part of the section name and ignored.
    - Whitespaces and comments in the middle of a section name
@@ -339,17 +338,19 @@ terminator *# or *;. Block comments MAY span multiple lines.
 13.1 Generell Parsing Rules
 
 A conforming parser SHOULD
-   - provide a function for iterating sections
-   - iterate entries until a new section or the document end
-   - return block contents as raw text without unescaping
+   - provide a function for iterating the sections of a block
+   - provide a function iterating the entries until a new section
+     or the document end
+   - return block contents as raw text without unquoting or
+     unescaping the content
    - treat blocks like independent documents
    - treat whitespaces and comments as token separators
-   - treat commas, periods, and escapes as normal token characters
+   - treat commas, periods, and escapes as part of tokens
    - treat quoted strings as non-terminating parts of tokens
    - treat escaped characters as literal characters
-   - treat a NULL (0x00) as document end at any occurrence
+   - treat a NULL byte (0x00) always as the document end
    - provide functions for removing quotes from strings and
-     optionally replacing escape sequences
+     replacing the escape sequences
 
 14.   Zero-Copy Model
 
@@ -381,12 +382,12 @@ Implementations MUST:
    - avoid unbounded recursion in deeply nested blocks if names or
      values refere to blocks or sections
    - avoid memory allocations during unescaping or removing of quotes
-   - treat input as untrusted and possibly incorrect
+   - treat all input as untrusted and possibly incorrect
    - ensure that numeric values are treated as decimal numbers except
      they are prefixed by a character sequence that distinguishes a
-     number them from decimal numbers by a letter instead of the decimal
-     digit '0'. Common prefixes of other bases are 0b for binary,
-     0o for octal and 0x for hexa_decimal numbers.
+     number them from decimal numbers by at least one letter that isn't
+     a decimal digit. The most common prefixes of other bases are 0b for
+     binary, 0o for octal and 0x for hexadecimal numbers.
 
 17.   Acknowledgements
 
