@@ -214,31 +214,28 @@ standard that conforming parsers should match
  https://github.com/klux21/composition/blob/main/composition_standard.txt
 
 If a parser intentionally deviates from that, it should document the differences.
-E.g. if it treats comma as whitespace and colons as equals signs for parsing JSON files
-and allowing common composition comments in those. Of course such a parser would have trouble
-with composition documents that are using commas and colons outside of embracing quotes so the
-users need to be aware of that. (However, it would be a better idea to implement a special
-conversion function for JSON data in that case.)
+E.g. if it supports C and C++ comments. Such a parser would have trouble with URIs or paths
+with wildcards outside of embracing quotes. For this the users need to be aware of that and
+not expecting it to handle data composition files according to the standard.
 
 Of course it's more likely that some people dislike some of the features and prefere a subset
 of that tiny format only. That's OK, but sectionless, commentless, unescaped, unquoted or
 non-hierarchical only data composition parsers should be refered as such to prevent confusions.
 
 But how fast is it? Parsing the following document zero-copy on a Ryzen 3900 took about
-400ns for finding all entries and 150ns for converting the eight numbers to either int64_t
+350ns for finding all entries and 150ns for converting the numbers to either int64_t
 or double using str2i64_r str2d_r of klux21/str2num:
 ```
 testname = zero_copy_tests
 inttests = { ib=0b1111 io=0o1234567 id=000056789 ix=0xabcd987 }
 floattests { fb=0b11.11e100 fo=0o1234.56e10 fd=1.2345e64 fx=0xabc.defp10 }
 ```
-The end of the subdocuments were searched before looking for the entries because of the
-treatment of subdocuments as strings. It could be faster without that.
+The end of the subdocuments were determined before looking for the entries because of the
+treatment of the subdocuments as strings. It could be faster without that.
 If all entries are copied into newly allocated strings before reading them than it's half
-as fast only. That's a common thing if removing quotes and replacing escapes requires a
-buffer for the modfied data.
+as fast only. That may be required for removing quotes and replacing escapes.
 
-The test project with the benchmark and the little parser for C and C++ can be found at
+The test project of that measurement and the little parser for C and C++ can be found at
 
 https://github.com/klux21/composition_parser
 
@@ -256,5 +253,5 @@ https://github.com/klux21/composition/issues
 | **YAML** | :x: No (Standard) | ✓ Yes | ✓ Yes (`#`) | :x: **No** | No native Hex-Float syntax, but extensible via tags. |
 | **HOCON** | :x: **No** | :x: **No** | ✓ Yes (`#`, `//`) | :x: **No** | Strictly limited to decimal JSON numbers.  |
 | **JSON** | :x: **No** | :x: **No** | :x: **No** | :x: **No** | Strictly limited to decimal JSON numbers; no comments allowed by spec.  |
-| **Composition Format** | ✓ Yes | ✓ Yes | ✓ Yes (`#`, `;`) | ✓ Yes (`#* *#`,`;* *;`) | Hex-Floats are industrial standard since tens of years and only strings in configurations. There is no need for prohibiting them. |
+| **Data Composition** | ✓ Yes | ✓ Yes | ✓ Yes (`#`, `;`) | ✓ Yes (`#* *#`,`;* *;`) | Hex-Floats are industrial standard since tens of years and only strings in configurations. There is no need for prohibiting them. |
 
