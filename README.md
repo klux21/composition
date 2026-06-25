@@ -242,6 +242,10 @@ The test project with the benchmark and the little parser for C and C++ can be f
 
 https://github.com/klux21/composition_parser
 
+That's all about it. Once there are errors or problems, file an issue at:
+
+https://github.com/klux21/composition/issues
+
 
 | Format/Language | Hex-Float Support (`0x...p...`) | NaN/Inf Support | Line Comments | Block Comments | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -252,8 +256,5 @@ https://github.com/klux21/composition_parser
 | **YAML** | :x: No (Standard) | ✓ Yes | ✓ Yes (`#`) | :x: **No** | No native Hex-Float syntax, but extensible via tags. |
 | **HOCON** | :x: **No** | :x: **No** | ✓ Yes (`#`, `//`) | :x: **No** | Strictly limited to decimal JSON numbers.  |
 | **JSON** | :x: **No** | :x: **No** | :x: **No** | :x: **No** | Strictly limited to decimal JSON numbers; no comments allowed by spec.  |
-| **Composition** | ✓ Yes | ✓ Yes | ✓ Yes (`#`, `;`) | ✓ Yes (`#* *#`,`;* *;`) | Hex-Floats are industrial standard since tens of years and only strings in configurations. There is no need for prohibiting them. |
+| **Composition Format** | ✓ Yes | ✓ Yes | ✓ Yes (`#`, `;`) | ✓ Yes (`#* *#`,`;* *;`) | Hex-Floats are industrial standard since tens of years and only strings in configurations. There is no need for prohibiting them. |
 
-That's all about it. Once there are errors or problems, file an issue at:
-
-https://github.com/klux21/composition/issues
