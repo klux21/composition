@@ -243,15 +243,3 @@ That's all about it. Once there are errors or problems, file an issue at:
 
 https://github.com/klux21/composition/issues
 
-
-| Format/Language | Hex-Float Support (`0x...p...`) | NaN/Inf Support | Line Comments | Block Comments | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **C / C++** | ✓ Yes (since C99/C++17) | ✓ Yes | ✓ Yes (`//`) | ✓ Yes (`/* */`) | Standard via `%a` / `std::hexfloat`. |
-| **Java** | ✓ Yes (Parser) | ✓ Yes | ✓ Yes (`//`) | ✓ Yes (`/* */`) | `Double.parseDouble("0x1.ap2")` works, but not in JSON/HOCON files.  |
-| **Python** | ✓ Yes | ✓ Yes | ✓ Yes (`#`) | :x: **No** | `float.fromhex()` and literal support. |
-| **TOML** | :x: No | ✓ Yes | ✓ Yes (`#`) | :x: **No** | Supports Hex-Ints, but *no* Hex-Floats (uses high-precision decimal). |
-| **YAML** | :x: No (Standard) | ✓ Yes | ✓ Yes (`#`) | :x: **No** | No native Hex-Float syntax, but extensible via tags. |
-| **HOCON** | :x: **No** | :x: **No** | ✓ Yes (`#`, `//`) | :x: **No** | Strictly limited to decimal JSON numbers.  |
-| **JSON** | :x: **No** | :x: **No** | :x: **No** | :x: **No** | Strictly limited to decimal JSON numbers; no comments allowed by spec.  |
-| **Data Composition** | ✓ Yes | ✓ Yes | ✓ Yes (`#`, `;`) | ✓ Yes (`#* *#`,`;* *;`) | Hex-Floats are industrial standard since tens of years and only strings in configurations. There is no need for prohibiting them. |
-
