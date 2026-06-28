@@ -36,8 +36,7 @@ composition document that the name refers to.
 
 Composition documents can be divided into sections for an improved readability
 and a limited compatibility with existing INI-based configurations.
-
-Those compositions keep the simplicity and readability of INI but add:
+Those documents keep the simplicity and readability of INI but add:
 
  -   hierarchical blocks using opening and closing braces `{` `}`
  -   optional sections
