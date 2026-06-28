@@ -10,7 +10,7 @@ can give highly complex configurations a remarkable readability.
 
 It considers the fact that many people need nothing more than a simple list of
 name–value pairs for a handful of program parameters - something for which even common
-INI files often seem like an overkill.
+INI files usually seem like an overkill.
 
 But sometimes such trivial configurations need a more hierarchical structure to
 describe the subelements of more complex entries.
