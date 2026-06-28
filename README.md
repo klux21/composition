@@ -27,8 +27,9 @@ and the quotes of their arguments strings.
 
 Of course, all you really need is a different kind of string — one that holds the
 configuration of the subparameters, can be parsed independently, and must never be
-unescaped. That's where this slightly different data composition format comes from
-which is referred as a 'composition' from now.
+unescaped because it's an independent subdocument. That's where this slightly
+different data composition format comes from which is referred as a 'composition'
+from now.
 
 The composition format consists of an ordered collection of entries. The entries
 consist of a name that is optionally followed by either an argument or a nested
