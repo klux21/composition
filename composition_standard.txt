@@ -2,7 +2,7 @@ Independent RFC-Style Format Specification Of Data Composition 1.0 Format
 
 A Structured, Untyped, Hierarchic Data Composition Format
 
-Version 1.0
+Version 1.1
 
 Data Composition is a modernized and improved configuration file format
 for storing all kind of serialized text data in a form that is easy for
@@ -107,17 +107,22 @@ comment.
 6.   Syntax (EBNF)
 Code
 
-document        = { entry | comment | section } ;
-entry           = named_entry | anonymous_block ;
+document        = { section | entry | block | comment } ;
+
 section         = "[" { name } "]" ;
-named_entry     = name [ value ] ;
-anonymous_block = block ;
-name            = unquoted | quoted ;
-value           = string | block ;
-string          = "=" ( unquoted | quoted ) ;
-block           = [ "=" ] "{" { entry | comment | section } "}" ;
+entry           = name  [ '=' value ] ;
+block           = "{" { entry | comment | section } "}" ;
+comment         = line_comment | block_comment ;
+
+name            = ( unquoted | quoted ) { ( unquoted | quoted ) } ;
+value           = block | ( ( unquoted | quoted ) { ( unquoted | quoted ) } ) ;
 
 quoted          = ( "\"" { char | escape } "\"" ) | ( "\'" { char | escape } "\'" ) ;
+unquoted        = { unquoted_char | escape } ;
+
+unquoted_char   = any_char_except( whitespace, "{", "}", "[", "]",
+                  "=", "\"", "#", ";", "'", "\", "\0") ;
+
 escape          = "\\" ( "\"" | "\\" | "a" | "b" | "d" | "e" | "f" | "n" | "r" | "t" | "v" | 
                   | oct_escape | dec_escape | hex_escape | byte_escape | char_escape ) ;
 
@@ -134,11 +139,6 @@ hex_digit       = "0"..."9" | "A"..."F" | "a"..."f" ;
 
 char_escape     = any_char_except( "\0" ) ;
 
-unquoted        = { unquoted_char } ;
-unquoted_char   = any_char_except( whitespace, "{", "}", "[", "]",
-                  "=", "\"", "#", ";" ) ;
-
-comment         = line_comment | block_comment ;
 line_comment    = "#" { not_newline } | ";" { not_newline } ;
 block_comment   = "#*" { not("*#") } "*#" | ";*" { not("*;") } "*;" ;
 
@@ -158,11 +158,10 @@ Code
    name = value
    name = "value"
    name = foo
-   name { ... }
    name = { ... }
 
-The equals sign (=) is mandatory for string values and optional for
-blocks. A named entry without a value is permitted and represents a
+The equals sign is mandatory for all argument values.
+A named entry without a value is permitted and represents a
 name with an empty value. Entries MAY span multiple lines.
 
 Note: Empty values are allowed to support patterns where the presence of
@@ -181,8 +180,6 @@ Code
   = "value"
 
 The name of such an entry is an empty string.
-Anonymous entries SHOULD NOT be mixed with named entries in the same
-block.
 Anonymous string entries SHOULD NOT be used.
 
 8.   Strings
@@ -293,11 +290,11 @@ document.
 11.  Sections
 
 Sections headers indicate the begin of a subsequent sequences of
-section related entries. The usage of sections is optional.
-A sections begins with the section header that contains the name
-of the section embraced by a pair of square braces [ ].
-The content of sections begins after the closing brace of the
-section header.
+section related entries. The use of sections is optional.
+A section begins with the section header that contains the section
+name enclosed in square braces [ ].
+The content of sections begins immediately after the closing brace of
+the section header.
 A new section implicitly terminates the content of a previous section
 within the same block but doesn't affect sections in parent blocks.
 The end of a block terminates the last section of that block.
@@ -312,7 +309,7 @@ In order to avoid ambiguity, the following additional rules apply:
    - Whitespaces and comments in the middle of a section name
      are part of that section name.
    - Curly braces and equals signs in section headers are treated
-     as a part of the section name.
+     as part of the section name.
 
 12.  Comments
 
@@ -341,9 +338,11 @@ A conforming parser SHOULD
    - provide a function for iterating the sections of a block
    - provide a function iterating the entries until a new section
      or the document end
+   - treat blocks like independent documents
    - return block contents as raw text without unquoting or
      unescaping the content
-   - treat blocks like independent documents
+   - return anonymous blocks as the argument of a value with an
+     empty name
    - treat whitespaces and comments as token separators
    - treat commas, periods, and escapes as part of tokens
    - treat quoted strings as non-terminating parts of tokens
