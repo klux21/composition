@@ -1,0 +1,19 @@
+###############################################################################
+#                                                                             #
+# History of Data Composition Format Specification                            #
+#                                                                             #
+###############################################################################
+
+data_composition.1.0.1   06/29/2026
+-----------------------------------
+
+ - Earlier versions allowed blocks to follow entry names without a mandatory =.
+   This caused ambiguity between unnamed blocks and blocks intended as entry
+   values. To resolve this, opening block braces { MUST now be preceded by =
+   when used as entry values.
+   Unnamed blocks remain valid values when not preceded by = but the
+   name of the block is empty than.
+
+data_composition.1.0.0   06/28/2026
+-----------------------------------
+ - Initial version of the data composition format standard.
