@@ -78,22 +78,22 @@ But let's start with a sample of what a composition document may look like.
 host = "localhost"
 port = 8080
 
-tls = {
-         enabled
-         certificate = "/etc/certs/server.pem"
+tls  = {
+   enabled
+   certificate = "/etc/certs/server.pem"
 
-         [ciphers]
+   [ciphers]
 
-         #*
-            comment block
-         *#
+   #*
+      comment block
+   *#
 
-         accept = {
-                     TLS_AES_128_CCM_8_SHA256
-                     TLS_CHACHA20_POLY1305_SHA256
-                     TLS_AES_128_GCM_SHA256
-                  }
-      }
+   accept = {
+      TLS_AES_128_CCM_8_SHA256
+      TLS_CHACHA20_POLY1305_SHA256
+      TLS_AES_128_GCM_SHA256
+   }
+}
 
 # line comment
 ```
@@ -132,23 +132,22 @@ value pair argument list as a composition. Of course strings that contain whites
 special characters require a pair of enclosing quotes for all of their parts that contain
 those.
 
-Equals signs `=` before curly braces aren't really required for the syntax and optional.
 The support of sections within compositions ensures compatibility with most existing INI files but
 it's also fine to omit sections completely.
 That way the configuration file above becomes even more trivial:
 
 ```
-server {
+server = {
    host = localhost
    port = 8080
 
-   tls {
+   tls = {
       enabled
       certificate = "/etc/certs/server.pem"
 
-      ciphers {
+      ciphers = {
          #* comment block *#
-         accept { TLS_AES_128_CCM_8_SHA256  TLS_CHACHA20_POLY1305_SHA256  TLS_AES_128_GCM_SHA256 }
+         accept = { TLS_AES_128_CCM_8_SHA256  TLS_CHACHA20_POLY1305_SHA256  TLS_AES_128_GCM_SHA256 }
       }
    }
 }
@@ -223,8 +222,9 @@ Of course it's more likely that some people dislike some of the features and pre
 of that tiny format only. That's OK, but sectionless, commentless, unescaped, unquoted or
 non-hierarchical only data composition parsers should be refered as such to prevent confusions.
 
-A sectionless and commentless variant of the data composition format that omits '='
-before curly braces '{' is one of the most token-efficient data formats.
+A sectionless and commentless variant of the data composition format is one of the most
+token-efficient forms of the format, provided that the tokenizer treats '=' followed by
+'{' as a single '={' token.
 
 But how fast is it? Parsing the following document zero-copy on a Ryzen 3900 took about
 350ns for finding all entries and 150ns for converting the numbers to either int64_t
