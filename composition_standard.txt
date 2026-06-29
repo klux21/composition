@@ -1,26 +1,29 @@
+Data Composition Format Specification
+RFC-Style Document (Preliminary Standard Version)
+Version 1.0.1
+
 Independent RFC-Style Format Specification Of Data Composition 1.0 Format
 
 A Structured, Untyped, Hierarchic Data Composition Format
 
-Version 1.1
+Version 1.0.1
 
 Data Composition is a modernized and improved configuration file format
-for storing all kind of serialized text data in a form that is easy for
+for storing all kinds of serialized text data in a form that is easy for
 humans and programs to read and write.
 
 1.   Abstract
 
 Data Composition is a minimal, untyped, whitespace-tolerant,
 block-structured text format designed for configuration files,
-lightweight data serialization, small text databases and lightweight
-text base protocols.
-The format defines a small set of syntactic constructs: entries,
-strings, blocks, sections and comments and intentionally avoids all type
-semantics.
-The Data Composition format is designed for very small parsers.
-Composition does not define executable constructs or encrypted file
-formats. Applications interpret string values according their own type
-system. A zero-copy parsing is possible.
+lightweight data serialization, small text databases, and lightweight
+text-based protocols. The format defines a small set of syntactic
+constructs: entries, strings, blocks, sections, and comments, and
+intentionally avoids all type semantics. The Data Composition format is
+designed for very small parsers. Composition does not define executable
+constructs or encrypted file formats. Applications interpret string
+values according to their own type system. Zero-copy parsing is
+possible.
 
 2.   Conventions Used in This Document
 
@@ -31,59 +34,57 @@ All examples are non-normative unless explicitly stated otherwise.
 
 3.   Overview
 
-Data Composition documents consists of
+Data Composition documents consist of
 
-  -  zero or more entries
-  -  optional top-level values
-  -  optional blocks subdocuments
-  -  optional top-level sections
-  -  optional comments
-  -  arbitrary whitespace
+  - zero or more entries
+  - optional top-level values
+  - optional block subdocuments
+  - optional top-level sections
+  - optional comments
+  - arbitrary whitespace
 
 Data Compositions are designed to be
 
-  -  easy to parse
-  -  easy to write
-  -  robust under human editing
-  -  suitable for zero-copy implementations
-  -  suitable for embedded systems
-  -  suitable for configuration files and small text databases
-  -  suitable for text-based protocols
+  - easy to parse
+  - easy to write
+  - robust under human editing
+  - suitable for zero-copy implementations
+  - suitable for embedded systems
+  - suitable for configuration files and small text databases
+  - suitable for text-based protocols
 
-The Data Composition format does not define data types.
-All values are strings or blocks of Data Composition subdocuments.
-Any interpretation of the strings is the responsibility of the
-application.
+The Data Composition format does not define data types. All values are
+strings or blocks of Data Composition subdocuments. Any interpretation
+of the strings is the responsibility of the application.
 
 4.   Data Model
 
-Data Composition documents are a sequence of entries.
-Each entry consists of
+Data Composition documents are sequences of entries. Each entry consists
+of
 
-  -  a name (possibly empty)
-  -  an optional argument that is either a value
-  -  or a block containing a subdocument
+  - a name (possibly empty)
+  - an optional argument that is either a value
+  - or a block containing a subdocument
 
 Values are either
 
-  -  unquoted strings
-  -  quoted strings
-  -  blocks
+  - unquoted strings
+  - quoted strings
+  - blocks
 
-Blocks contain nested entries.
-Data Composition documents consists of 8-bit characters.
-Application may restrict themselves to UTF-8.
+Blocks contain nested entries. Data Composition documents consist of
+8-bit characters. Applications MAY restrict themselves to UTF-8.
 
 5.   Whitespace Handling (Normative)
 
-The following characters are whitespace according to this standard
+The following characters are whitespace according to this standard:
 
-  -  0x9   Character Tabulation (TAB)
-  -  0xA   Line Feed (LF)
-  -  0xB   Line Tabulation (VT)
-  -  0xC   Form Feed (FF)
-  -  0xD   Carriage Return (CR)
-  -  0x20  Space (SP)
+  - 0x9   Character Tabulation (TAB)
+  - 0xA   Line Feed (LF)
+  - 0xB   Line Tabulation (VT)
+  - 0xC   Form Feed (FF)
+  - 0xD   Carriage Return (CR)
+  - 0x20  Space (SP)
 
 This design avoids the complexities of Unicode whitespace handling and
 ensures that editors which do not display all control characters cannot
@@ -93,16 +94,15 @@ document.
 Whitespace MAY appear between any two lexical tokens, including before
 and after:
 
-  -  names
-  -  values
-  -  the equals sign (=)
-  -  block delimiters ({ and })
-  -  comments
+  - names
+  - values
+  - the equals sign (=)
+  - block delimiters ({ and })
+  - comments
 
-Whitespace MUST NOT appear inside unquoted strings.
-Whitespace inside quoted strings is preserved exactly as written.
-Line breaks have no syntactic meaning except when terminating a line
-comment.
+Whitespace MUST NOT appear inside unquoted strings. Whitespace inside
+quoted strings is preserved exactly as written. Line breaks have no
+syntactic meaning except when terminating a line comment.
 
 6.   Syntax (EBNF)
 Code
@@ -123,7 +123,7 @@ unquoted        = { unquoted_char | escape } ;
 unquoted_char   = any_char_except( whitespace, "{", "}", "[", "]",
                   "=", "\"", "#", ";", "'", "\", "\0") ;
 
-escape          = "\\" ( "\"" | "\\" | "a" | "b" | "d" | "e" | "f" | "n" | "r" | "t" | "v" | 
+escape          = "\\" ( "\"" | "\\" | "a" | "b" | "d" | "e" | "f" | "n" | "r" | "t" | "v"
                   | oct_escape | dec_escape | hex_escape | byte_escape | char_escape ) ;
 
 oct_escape      = oct_digit [ oct_digit ] [ oct_digit ] ;
@@ -160,14 +160,14 @@ Code
    name = foo
    name = { ... }
 
-The equals sign is mandatory for all argument values.
-A named entry without a value is permitted and represents a
-name with an empty value. Entries MAY span multiple lines.
+The equals sign is mandatory for all argument values. A named entry
+without a value is permitted and represents a name with an empty value.
+Entries MAY span multiple lines.
 
 Note: Empty values are allowed to support patterns where the presence of
       a name alone conveys meaning. Applications MAY interpret such
       entries as boolean flags or symbolic attributes, but Data
-      Compositions themself assign no intrinsic semantics.
+      Composition itself assigns no intrinsic semantics.
 
 7.2  Anonymous Entries
 
@@ -179,8 +179,8 @@ Code
   { ... }
   = "value"
 
-The name of such an entry is an empty string.
-Anonymous string entries SHOULD NOT be used.
+The name of such an entry is an empty string. Anonymous string entries
+SHOULD NOT be used.
 
 8.   Strings
 
@@ -188,29 +188,28 @@ Anonymous string entries SHOULD NOT be used.
 
 Unquoted strings consist of any characters except:
 
-  -  whitespace
-  -  { } [ ] = " '
-  -  comment initiators (#, ;)
-  -  NULL (0x00)
+  - whitespace
+  - { } [ ] = " '
+  - comment initiators (#, ;)
+  - NULL (0x00)
 
 Unquoted strings end at the first disallowed character not escaped by a
 backslash.
 
 8.2  Quoted Strings
 
-Quoted strings begin and end with a single quote (') or double
-quotes ("). Between a pair of single quotes or double quotes the other
-quote type becomes a literal character and part of the string data.
-Escape sequences within quoted strings are permitted and handled the
-same as outside of quoted strings.
+Quoted strings begin and end with a single quote (') or double quote (").
+Between a pair of single quotes or double quotes the other quote type
+becomes a literal character and part of the string data. Escape
+sequences within quoted strings are permitted and handled the same as
+outside quoted strings.
 
 8.3  Escape Sequences
 
 Escape sequences allow all names and values to be represented without
-requiring surrounding quotes and simplify automated serialization.
-They are always treated as part of either a name or a value.
-The following escape sequences MUST be supported and interpreted as
-follows:
+requiring surrounding quotes and simplify automated serialization. They
+are always treated as part of either a name or a value. The following
+escape sequences MUST be supported and interpreted as follows:
 
   \"      double quote    (0x22)
   \'      single quote    (0x27)
@@ -219,27 +218,26 @@ follows:
   \b      back space      (BS,  0x8)
   \t      horizontal tab  (HT,  0x9)
   \n      line feed       (LF,  0xA)
-  \t      vertictal tab   (VT,  0xB)
+  \v      vertical tab    (VT,  0xB)
   \r      carriage return (CR,  0xD)
   \f      form feed       (FF,  0xC)
   \e      escape          (ESC, 0x1B)
-  \O      byte as a octal value O (1-3 octal digits)
+  \O      byte as an octal value O (1-3 octal digits)
   \dD     byte as a decimal value D (1-3 decimal digits)
   \xH     byte as a hexadecimal value H (1-2 hexadecimal digits)
-  \uH     byte sequence according the hexadecimal value H
+  \uH     byte sequence according to the hexadecimal value H
           (1-8 hexadecimal digits)
 
-Leading zeros within a decimal, octal and hexadecimal escapes are
-permitted.
-Control characters SHOULD be specified as numeric escapes.
+Leading zeros within decimal, octal, and hexadecimal escapes are
+permitted. Control characters SHOULD be specified as numeric escapes.
 Numeric values MUST NOT exceed byte range nor the number of digits.
-Byte sequences SHALL be treated as a common part of a string.
-Conforming parsers MUST leave \u interpretation to the application.
+Byte sequences SHALL be treated as part of a string. Conforming parsers
+MUST leave \u interpretation to the application.
 
 8.3.1 Handling of Unknown Escape Sequences (Normative)
 
-Unknown escape sequences MUST be interpreted as
-discarding the backslash and keep the following character.
+Unknown escape sequences MUST be interpreted as discarding the backslash
+and keeping the following character.
 
 Examples:
 
@@ -249,14 +247,14 @@ Examples:
   \#      becomes: #
   \;      becomes: ;
 
-A backslash followed by whitespace (e.g. "\ ") becomes that
-whitespace but it is strongly discouraged to escape whitespace
-but to use numeric or other escapes.
+A backslash followed by whitespace becomes that whitespace. Escaping
+whitespace is strongly discouraged; numeric escapes SHOULD be used
+instead.
 
-The following exception applies:
+Exception:
 
 A backslash followed by a NULL byte (0x00) is NOT permitted and
-terminates the parsing.
+terminates the document.
 
 9.   Binary Data
 
@@ -270,11 +268,9 @@ Code
    "A\x2"
    "A\255"
 
-10.  Blocks of subdocuments
+10.  Blocks of Subdocuments
 
-Blocks begin with { and end with }.
-
-Blocks MAY contain:
+Blocks begin with { and end with }. Blocks MAY contain:
 
    - entries
    - comments
@@ -283,38 +279,36 @@ Blocks MAY contain:
 
 Blocks MAY be nested arbitrarily.
 
-A } closes the innermost open block only.
-The content of a block is equivalent to a separate Data Composition
-document.
+A } closes the innermost open block only. The content of a block is
+equivalent to a separate Data Composition document.
 
 11.  Sections
 
-Sections headers indicate the begin of a subsequent sequences of
-section related entries. The use of sections is optional.
-A section begins with the section header that contains the section
-name enclosed in square braces [ ].
-The content of sections begins immediately after the closing brace of
-the section header.
-A new section implicitly terminates the content of a previous section
-within the same block but doesn't affect sections in parent blocks.
-The end of a block terminates the last section of that block.
-Documents and blocks MAY contain comments and entries before the
-first section.
+Section headers indicate the beginning of a subsequent sequence of
+section-related entries. The use of sections is optional. A section
+begins with a section header that contains the section name enclosed in
+square braces [ ]. The content of a section begins immediately after the
+closing brace of the section header. A new section implicitly terminates
+the content of the previous section within the same block but does not
+affect sections in parent blocks. The end of a block terminates the last
+section of that block. Documents and blocks MAY contain comments and
+entries before the first section.
 
-In order to avoid ambiguity, the following additional rules apply:
+To avoid ambiguity, the following additional rules apply:
+
    - The braces of section headers are not nesting.
    - Multiple sections of a document MAY share the same name.
-   - Comments and whitespaces between the enclosing braces and the
-     section name aren't part of the section name and ignored.
-   - Whitespaces and comments in the middle of a section name
-     are part of that section name.
-   - Curly braces and equals signs in section headers are treated
-     as part of the section name.
+   - Comments and whitespace between the enclosing braces and the
+     section name are not part of the section name and are ignored.
+   - Whitespace and comments inside a section name are part of that
+     section name.
+   - Curly braces and equals signs in section headers are treated as
+     part of the section name.
 
 12.  Comments
 
-Comments outside quoted strings are treated as whitespace.
-Comments inside quoted strings are literal text.
+Comments outside quoted strings are treated as whitespace. Comments
+inside quoted strings are literal text.
 
 A NULL byte inside a comment terminates the document.
 
@@ -325,51 +319,51 @@ Line comments begin with # or ; and extend to the end of the line.
 12.2 Block Comments
 
 Block comments begin with #* and end with *# or begin with ;* and end
-with *; .
-Block comments are not nested.
-A block comment that begins with #* or ;* ends with the matching
-terminator *# or *;. Block comments MAY span multiple lines.
+with *;. Block comments are not nested. A block comment that begins with
+#* or ;* ends with the matching terminator *# or *;. Block comments MAY
+span multiple lines.
 
 13.  Parsing Rules
 
-13.1 Generell Parsing Rules
+13.1 General Parsing Rules
 
 A conforming parser SHOULD
+
    - provide a function for iterating the sections of a block
-   - provide a function iterating the entries until a new section
+   - provide a function for iterating entries until a new section
      or the document end
    - treat blocks like independent documents
    - return block contents as raw text without unquoting or
      unescaping the content
    - return anonymous blocks as the argument of a value with an
      empty name
-   - treat whitespaces and comments as token separators
+   - treat whitespace and comments as token separators
    - treat commas, periods, and escapes as part of tokens
    - treat quoted strings as non-terminating parts of tokens
    - treat escaped characters as literal characters
    - treat a NULL byte (0x00) always as the document end
    - provide functions for removing quotes from strings and
-     replacing the escape sequences
+     replacing escape sequences
 
 14.   Zero-Copy Model
 
 A conforming parser MAY support zero-copy operation:
 
-   - Names and strings MAY be returned as slices of the input buffer. 
+   - Names and strings MAY be returned as slices of the input buffer.
    - The data of blocks MAY be returned as slices of the input
-     including the entangling braces for indicating a block content.
-   - After an in-place removal of quotes or in-place unescaping the
-     modified part of the input buffer shouldn't be parsed again.
+     including the enclosing braces to indicate block content.
+   - After in-place removal of quotes or in-place unescaping the
+     modified part of the input buffer SHOULD NOT be parsed again.
    - Applications MAY request an unquoted and optionally unescaped
      copy of names and string values.
-   - The content of blocks SHOULD be returned by keeping all quotes
-     and escape sequences of the content unchanged.
+   - The content of blocks SHOULD be returned with all quotes and
+     escape sequences preserved.
 
 15.3  Error Conditions
 
 A parser MUST always terminate parsing on:
 
-   - unexpected curled or square braces outside of quoted strings and
+   - unexpected curly or square braces outside quoted strings and
      comments
    - any NULL (0x00) bytes in input
 
@@ -379,17 +373,16 @@ Implementations MUST:
 
    - avoid names of sections and entries that contain quotes or escapes
    - avoid unbounded recursion in deeply nested blocks if names or
-     values refere to blocks or sections
-   - avoid memory allocations during unescaping or removing of quotes
+     values refer to blocks or sections
+   - avoid memory allocations during unescaping or removing quotes
    - treat all input as untrusted and possibly incorrect
-   - ensure that numeric values are treated as decimal numbers except
-     they are prefixed by a character sequence that distinguishes a
-     number them from decimal numbers by at least one letter that isn't
-     a decimal digit. The most common prefixes of other bases are 0b for
-     binary, 0o for octal and 0x for hexadecimal numbers.
+   - ensure that numeric values are treated as decimal numbers unless
+     prefixed by a sequence that distinguishes them from decimal numbers
+     by at least one non-decimal letter (e.g., 0b for binary, 0o for
+     octal, 0x for hexadecimal)
 
 17.   Acknowledgements
 
-The Data Composition format draws inspiration from INI, XML, JSON and
+The Data Composition format draws inspiration from INI, XML, JSON, and
 block-structured languages while intentionally avoiding complexity and
 type semantics.
