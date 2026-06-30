@@ -14,16 +14,20 @@ humans and programs to read and write.
 
 1.   Abstract
 
-Data Composition is a minimal, untyped, whitespace-tolerant,
-block-structured text format designed for configuration files,
-lightweight data serialization, small text databases, and lightweight
-text-based protocols. The format defines a small set of syntactic
-constructs: entries, strings, blocks, sections, and comments, and
-intentionally avoids all type semantics. The Data Composition format is
-designed for very small parsers. Composition does not define executable
-constructs or encrypted file formats. Applications interpret string
-values according to their own type system. Zero-copy parsing is
-possible.
+The Data Composition format is a very small, hierarchical, untyped,
+whitespace-tolerant, block-structured text format designed for
+human-readable configuration files, lightweight data serialization,
+small text databases, and text-based protocols.
+Unlike formats optimized primarily for machine or AI consumption,
+Data Composition maintains deterministic structure while preserving
+readability for humans. It provides a deterministic grammar with
+entries, values, blocks, sections, and comments, while intentionally
+avoiding type semantics.
+The format is suitable for small parsers, embedded environments, and
+AI systems that require deterministic and easily analyzable
+hierarchical structures.
+Data Composition aims to offer a simple and robust alternative to
+existing structured text formats.
 
 2.   Conventions Used in This Document
 
