@@ -222,9 +222,8 @@ Of course it's more likely that some people dislike some of the features and pre
 of that tiny format only. That's OK, but sectionless, commentless, unescaped, unquoted or
 non-hierarchical only data composition parsers should be refered as such to prevent confusions.
 
-A sectionless and commentless variant of the data composition format is one of the most
-token-efficient forms of the format, provided that the tokenizer treats '=' followed by
-'{' as a single '={' token.
+A sectionless and commentless variant of the data composition format without unnecessary
+blanks is one of the most token-efficient forms of the composition format.
 
 But how fast is it? Parsing the following document zero-copy on a Ryzen 3900 took about
 350ns for finding all entries and 150ns for converting the numbers to either int64_t
