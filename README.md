@@ -235,7 +235,8 @@ floattests { fb=0b11.11e100 fo=0o1234.56e10 fd=1.2345e64 fx=0xabc.defp10 }
 ```
 For a Raspberry Pi5 it took 416ns to iterate over the entries and 170ns to read the numbers.
 If all entries are copied into newly allocated zero terminated strings before reading them
-then it is 2 to 5 times slower (depending on the heap) but also that is remarkably fast as well.
+then parsing becomes 2 to 5 times slower (depending on the heap) but also that is remarkably
+fast as well.
 
 The test project of that measurement and the first little parser for C and C++ can be found at
 
