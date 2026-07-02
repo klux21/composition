@@ -104,7 +104,7 @@ That is basically all that structured data compositions need.
 Structured compositions have a very minimal syntax; a document consists of three
 types of elements:
 
-  - Entries which consists of a name string that can be followed by an equality sign
+  - Entries which consist of a name string that can be followed by an equality sign
     and an argument value.
   - Blocks of subdocuments, as a special type of entry, where the argument is an
     independent composition document enclosed in curly braces.
