@@ -226,16 +226,16 @@ A sectionless and commentless variant of the data composition format without unn
 blanks is one of the most token-efficient forms of the composition format.
 
 But how fast is it? Parsing the following document zero-copy on a Ryzen 3900 took about
-165ns to iterate over the entries and 125ns for converting the numbers to either int64_t
+160ns to iterate over the entries and 130ns for converting the numbers to either int64_t
 or double using the functions str2i64_r str2d_r from klux21/str2num:
 ```
 testname = zero_copy_tests
 inttests = { ib=0b1111 io=0o1234567 id=000056789 ix=0xabcd987 }
 floattests = { fb=0b11.11e100 fo=0o1234.56e10 fd=1.2345e64 fx=0xabc.defp10 }
 ```
-For a Raspberry Pi5 it took 310ns to iterate over the entries and 185ns to read the numbers.
+For a Raspberry Pi5 it took 300ns to iterate over the entries and additional 175ns to read the numbers.
 If all entries are copied into newly allocated zero terminated strings before reading them
-then the parsing becomes 2 to 5 times slower (depending on the heap) but also that is remarkably fast.
+then the parsing becomes 2 to 6 times slower (depending on the heap) but also that is remarkably fast.
 
 The test project of that measurement and the first little parser for C and C++ can be found at
 
