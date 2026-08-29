@@ -9,27 +9,28 @@ data formats. It consists of strings, structural markers, and comments only, yet
 can give highly complex configurations a remarkable readability.
 
 It considers the fact that many people need nothing more than a simple list of
-name–value pairs for a handful of program parameters - something for which even common
-INI files usually seem like an overkill.
+name–value pairs for a handful of program parameters - something where even INI files
+seem an overkill.
 
-But sometimes such trivial configurations need a more hierarchical structure to
-describe the subelements of more complex entries.
+But sometimes such trivial configurations need a more hierarchical structure
+because of some more complex entries which require subelements.
 
-One way to achieve this would be to switch to JSON or XML, but both come with rigid
-syntax rules and would turn that simple configuration file into an eyesore.
+One way to achieve this would be to switch to JSON or XML, but both come with a more
+complex and verbose syntax which make a simple configuration file more complex.
 
-The most common workaround would be to pack the subentries into a single string and
-parse that string independently after reading it from the configuration file.
+A common workaround for INI files would be to pack the description of the subelements
+into a string and parse that string content independently.
+
 However, this comes with a serious flaw: such a hierarchical structure is hard
-to extend and may even become a nightmare of escaping if the entries within such a
-string have subelements as well which require an escaping of some special characters
-and the quotes of their arguments strings.
+to extend and may become a nightmare of escaping if the entries within such a
+string have subelements as well because it requires an escaping of the special
+characters and quotes of the subelements. The main problem is that the number of
+required backslashes duplicates with each additional level of child elements.
 
-Of course, all you really need is a different kind of string — one that holds the
-configuration of the subparameters, can be parsed independently, and must never be
-unescaped because it's an independent subdocument. That's where this slightly
-different data composition format comes from which is referred as a 'composition'
-from now.
+Of course all you need is a different kind of parameter string enclosed in curly brackets
+that holds the configuration of the subparameters but never must be unescaped because it
+contains a plain text subdocument. That's where this data composition format comes from
+which is referred as a 'composition' from now.
 
 The composition format consists of an ordered collection of entries. The entries
 consist of a name that is optionally followed by either an argument or a nested
@@ -42,10 +43,10 @@ Those documents keep the simplicity and readability of INI but add:
  -   hierarchical blocks using opening and closing braces `{` `}`
  -   optional sections
  -   quoted and unquoted strings
- -   robust comment syntax
+ -   robust comment syntax that has also block comments
  -   the option of a zero-copy-friendly parsing
-
-Compositions have no type systems; values are always strings or subdocuments.
+ 
+Compositions have no type systems. Values are either strings or subdocuments.
 Compositions are designed for:
 
  -   configuration files
@@ -60,17 +61,16 @@ They are intentionally minimal, deterministic, and easy to parse in C and other 
 But why compositions?
 
  - Classic INI is easy to read and write but not hierarchical and usually line-separated.
- - TOML is similar to INI but adds type restrictions.
- - JSON is hierarchical but verbose, rigid, and lacks comments.
- - YAML is flexible but fragile.
- - XML  is verbose and not great to read for humans or machines.
- - And compositions? Well, those are quite a different kind of music that's for grown ups.
+ - TOML is similar to INI but adds type restrictions and a uncommon syntax enhancement.
+ - JSON is hierarchical but quite verbose, rigid, and lacks comments.
+ - YAML is flexible but fragile and even requires to care about white space.
+ - XML  is quite verbose and not great to read for humans nor machines.
+ - And compositions? Well, those are a different kind of music.
 
-Structured compositions are easy to create and trivial to use. They don't require a
-college degree or big manuals to understand the syntax. They may contain comments because
-they are not JSON and comments should be used where those are helpful.
+Structured data compositions are very trivial and easy to use. They don't require a
+college degree or big manuals to understand the syntax.
 
-But let's start with a sample of what a composition document may look like.
+But let's start with a sample what a composition document may look like:
 
 ```
 [server]
@@ -99,7 +99,7 @@ tls  = {
 ```
 Well, that looks a bit like INI except that there is that tls block that contains
 a composition of entries which look more or less like an INI file as well.
-That is basically all that structured data compositions need.
+And that's basically all that a hierarchical structured data composition needs.
 
 Structured compositions have a very minimal syntax; a document consists of three
 types of elements:
@@ -119,21 +119,19 @@ Besides that, there are two types of comments:
   - Block comments start with a `#*` or `;*` sequence and end with the start sequence in
     reversed order which is `*#` or `*;`.
 
-Of course there is a little bit more. For a more flexible usage of structured compositions,
-line feeds are used for terminating line comments but otherwise they are entry-separating
-whitespace only. Therefore a single line would be enough for a composition document like
-before
+Of course there is a little bit more. For a more flexible usage of structured compositions
+line feeds are terminating line comments but are otherwise just entry-separating whitespaces
+only. That's why a single line would be enough for a composition document like before
 
 ```
 [server] host="localhost" port=8080 tls={ enabled certificate="/etc/certs/server.pem" [ciphers] #* comment block *# accept={ TLS_AES_128_CCM_8_SHA256  TLS_CHACHA20_POLY1305_SHA256  TLS_AES_128_GCM_SHA256 }}} # line comment
 ```
-This may seem a little bit unconventional first but allows to treat every simple name
-value pair argument list as a composition. Of course strings that contain whitespaces or
-special characters require a pair of enclosing quotes for all of their parts that contain
-those.
+This may seem a little bit unconventional first but allows to treat a simple liste of names
+or name value pairs as a composition. Of course strings that contain whitespaces or
+special characters require an escaping of those or to enclose those in quotes.
 
-The support of sections within compositions ensures compatibility with most existing INI files but
-it's also fine to omit sections completely.
+The support of sections within compositions ensures a compatibility with many existing
+INI files but it's also fine to omit sections totally.
 That way the configuration file above becomes even more trivial:
 
 ```
@@ -157,8 +155,8 @@ server = {
 That's not XML, JSON or INI but a very lightweight and well structured configuration.
 However, in case of more complex configurations sections may help to improve the readability.
 
-But what's with multi-line strings as in TOML? Well, because line-feeds are treated as whitespace
-strings may contain line-feeds and are allowed to span over as many lines as you want.
+But what's with multi-line strings as in TOML? Because line-feeds are treated as whitespace
+strings may contain line-feeds and are allowed to span over multiple lines.
 
 For parsing composition documents the application needs to know what entry names it expects,
 what types the arguments are of, where the entries are located within document structure,
@@ -187,17 +185,17 @@ So what does it take to parse something like that in C?
   internal data types; e.g. if an argument holds the value of a double they may call strtod()
   or they call strptime() if the argument refers to a time value.
 
-That's nearly all of the magic that parsing composition documents requires.
-Once you have a parser, composition documents are very trivial to handle and a very powerful tool.
+That's nearly all of the magic that parsing a composition document requires.
+Once you have a parser, composition documents are a trivial to handle and very powerful tool.
 
-Usually it's not the parsing of the document structure but the conversion of the strings
-to integers, floats and times that consumes most of the CPU time.
+Usually it's not the parsing of the document structure but the conversion of strings to
+integers, floats and times that consumes most of the CPU time.
 If this becomes a problem, or if your compiler doesn't support hexadecimal floats or the
 binary and octal prefixes 0b and 0o already, try:
 
  https://github.com/klux21/str2num
 
-The following project may help with time values
+The following project may be helpful for time values
 
  https://github.com/klux21/limitless_times
 
@@ -205,10 +203,10 @@ One of the greatest advantages of composition documents is their very lenient sy
 The format does not have many special elements. A simple list of whitespace or
 line feed separated numbers or words and many INI files are already are valid composition
 documents. Because of this the most common file extensions for composition documents are
-.ini or .cfg and rarely .cof that indicates a composition file.
+.ini or .cfg and more specific .cof which indicates a composition format file.
 
 Of course most people have very different ideas how their very own compositions should be.
-To reduce deviations between parsers, there is an initial draft of a tiny composition
+To reduce deviations between parsers, there exists an initial draft of a data composition
 standard that conforming parsers should match
 
  https://github.com/klux21/composition/blob/main/composition_standard.txt
