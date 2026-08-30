@@ -18,26 +18,28 @@ because of some more complex entries which require subelements.
 One way to achieve this would be to switch to JSON or XML, but both come with a more
 complex and verbose syntax which make a simple configuration file more complex.
 
-A common workaround for INI files would be to pack the description of the subelements
-into a string and parse that string content independently.
+A common workaround for keeping it an INI file would be to pack the description of the
+subelements into a string and parse that string content independently.
 
 However, this comes with a serious flaw: such a hierarchical structure is hard
-to extend and may become a nightmare of escaping if the entries within such a
-string have subelements as well because it requires an escaping of the special
+to maintain and may become a nightmare of escaping if the entries within such a
+string have subelements as well. It's because this requires an escaping of the special
 characters and quotes of the subelements. The main problem is that the number of
-required backslashes duplicates with each additional level of child elements.
+required backslashes duplicates with each additional level of child elements so anything
+more than one or two level of subelements is hard to maintain.
 
-Of course all you need is a different kind of parameter string enclosed in curly brackets
-that holds the configuration of the subparameters but never must be unescaped because it
-contains a plain text subdocument. That's where this data composition format comes from
-which is referred as a 'composition' from now.
+However, all you need is a different kind of parameter string that holds the configuration
+of the subparameters enclosed in curly brackets. The content of that string must treated as
+as the text of a subdocument and not being unescaped or unquoted at all. That's the origin
+of this trivial data composition format which is referred as just a 'composition' from here.
 
-The composition format consists of an ordered collection of entries. The entries
-consist of a name that is optionally followed by either an argument or a nested
-composition document that the name refers to.
+The composition format consists of an ordered collection of entries. Each entries consist
+of a name which is optionally followed by either an argument or a nested composition
+document that the name refers to.
 
-Composition documents can be divided into sections for an improved readability
-and a limited compatibility with existing INI-based configurations.
+Composition documents can be divided into sections for an improved readability and a limited
+compatibility with existing INI-based configurations.
+
 Those documents keep the simplicity and readability of INI but add:
 
  -   hierarchical blocks using opening and closing braces `{` `}`
@@ -46,7 +48,7 @@ Those documents keep the simplicity and readability of INI but add:
  -   robust comment syntax that has also block comments
  -   the option of a zero-copy-friendly parsing
  
-Compositions have no type systems. Values are either strings or subdocuments.
+Compositions have no type systems. The values of the entries are either strings or subdocuments.
 Compositions are designed for:
 
  -   configuration files
@@ -56,19 +58,19 @@ Compositions are designed for:
  -   text-based protocols
  -   DOM-style structured data
 
-They are intentionally minimal, deterministic, and easy to parse in C and other languages.
+They are intentionally minimal, deterministic, and easy to parse in C and all other languages.
 
 But why compositions?
 
  - Classic INI is easy to read and write but not hierarchical and usually line-separated.
  - TOML is similar to INI but adds type restrictions and a uncommon syntax enhancement.
  - JSON is hierarchical but quite verbose, rigid, and lacks comments.
- - YAML is flexible but fragile and even requires to care about white space.
+ - YAML is flexible but fragile and even requires to care about the white spaces.
  - XML  is quite verbose and not great to read for humans nor machines.
  - And compositions? Well, those are a different kind of music.
 
-Structured data compositions are very trivial and easy to use. They don't require a
-college degree or big manuals to understand the syntax.
+Structured data compositions have a very trivial grammar and are easy to use. They don't
+require a college degree or big manuals to understand the syntax.
 
 But let's start with a sample what a composition document may look like:
 
