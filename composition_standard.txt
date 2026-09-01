@@ -1,12 +1,12 @@
 Data Composition Format Specification
 RFC-Style Document (Preliminary Standard Version)
-Version 1.0.1
+Version 1.0.2
 
 Independent RFC-Style Format Specification Of Data Composition 1.0 Format
 
 A Structured, Untyped, Hierarchic Data Composition Format
 
-Version 1.0.1
+Version 1.0.2
 
 Data Composition is a modernized and improved configuration file format
 for storing all kinds of serialized text data in a form that is easy for
@@ -108,46 +108,53 @@ Whitespace MUST NOT appear inside unquoted strings. Whitespace inside
 quoted strings is preserved exactly as written. Line breaks have no
 syntactic meaning except when terminating a line comment.
 
-6.   Syntax (EBNF)
+6.   Syntax (ABNF)
 Code
 
-document        = { section | entry | block | comment } ;
+; Alphabet: 8-bit byte values (0x00-0xFF), not depending on encoding
 
-section         = "[" { name } "]" ;
-entry           = name  [ '=' value ] ;
-block           = "{" { entry | comment | section } "}" ;
-comment         = line_comment | block_comment ;
+document      = *( section / entry / block / comment / whitespace ) ;
 
-name            = ( unquoted | quoted ) { ( unquoted | quoted ) } ;
-value           = block | ( ( unquoted | quoted ) { ( unquoted | quoted ) } ) ;
+section       = "[" *( name / comment )  "]" ;
+entry         = name [ *whitespace '=' *whitespace value ] ;
+block         = "{" *( entry / comment / section / whitespace ) "}" ;
+comment       = line_comment / block_comment ;
 
-quoted          = ( "\"" { char | escape } "\"" ) | ( "\'" { char | escape } "\'" ) ;
-unquoted        = { unquoted_char | escape } ;
+name          = 1*( unquoted / quoted ) ;
+value         = block / 1*( unquoted / quoted ) ;
 
-unquoted_char   = any_char_except( whitespace, "{", "}", "[", "]",
-                  "=", "\"", "#", ";", "'", "\", "\0") ;
+line_comment  = ( "#" / ";" ) *( %x01-09 / %x0A-FF ) ( new_line / %x00 );
+block_comment = "#*" *( escape / nonzero_char ) ( "*#" / %x00 ) /
+                ";*" *( escape / nonzero_char ) ( "*;" / %x00 ) ;
 
-escape          = "\\" ( "\"" | "\\" | "a" | "b" | "d" | "e" | "f" | "n" | "r" | "t" | "v"
-                  | oct_escape | dec_escape | hex_escape | byte_escape | char_escape ) ;
+quoted        = ( "\"" *( escape / nonzero_char ) "\"" ) /
+                ( "'"  *( escape / nonzero_char ) "'" ) ;
+unquoted      = 1*( escape / regular_char ) ;
 
-oct_escape      = oct_digit [ oct_digit ] [ oct_digit ] ;
-oct_digit       = "0"..."7" ;
+escape        = "\" ( '"' / "'" / "\" / "a" / "b" / "e" / "f" / "n" /
+                "r" / "t" / "v" / oct_escape / dec_escape / hex_escape /
+                byte_escape / char_escape ) ;
 
-dec_escape      = "d" dec_digit [ dec_digit ] [ dec_digit ] ;
-dec_digit       = "0"..."9" ;
+oct_escape    = 1*3 oct_digit ;
+oct_digit     = %x30-37 ;
 
-hex_escape      = "x" hex_digit [ hex_digit ] ;
-byte_escape     = "u" hex_digit [ hex_digit ] [ hex_digit ] [ hex_digit ]
-                  [ hex_digit ] [ hex_digit ] [ hex_digit ] [ hex_digit ] ;
-hex_digit       = "0"..."9" | "A"..."F" | "a"..."f" ;
+dec_escape    = "d" 1*3 dec_digit ;
+dec_digit     = %x30-39 ;
 
-char_escape     = any_char_except( "\0" ) ;
+hex_escape    = "x" 1*2 hex_digit ;
+byte_escape   = "u" 1*8 hex_digit ;
+hex_digit     = %x30-39 / %x41-46 / %x61-66 ;
 
-line_comment    = "#" { not_newline } | ";" { not_newline } ;
-block_comment   = "#*" { not("*#") } "*#" | ";*" { not("*;") } "*;" ;
+char_escape   = nonzero_char ;
 
-Whitespace is allowed between all tokens except inside unquoted strings.
-Any sequence of whitespace is treated as a token separator.
+;special_char = whitespace /
+; "{" / "}" / "[" / "]" / "=" / "'" / '"' / "#" / ";" / "\" / %x00 ;
+regular_char  = %x01-08 / %x0E-19 / %x21 / %x24-26 / %x28-3A / %x3C /
+                %x3E-5A / %x5E-7A / %x7C / %x7E-FF ;
+new_line      = %x0A ;
+any_char      = %x00-FF ;
+nonzero_char  = %x01-FF ;
+whitespace    = %x09-0D / %x20 ;
 
 7.   Entries
 
