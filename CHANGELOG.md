@@ -1,5 +1,10 @@
 # Changelog of Data Composition Format Specification
 
+## data_composition.1.0.2 / 2026-00-01
+
+ - several minor adjustments of the README.md
+ - erroneous EBNF grammar replace by ABNF
+
 ## data_composition.1.0.1 / 2026-06-29
 
  - Earlier versions allowed entry names followed by a blocks without a mandatory `=` that
